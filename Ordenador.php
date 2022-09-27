@@ -3,6 +3,7 @@
 class Ordenador{
     private string $SO;
     private string $CodHZ;
+    private bool $esSobremesa;
     
     public function getSO()
     {
@@ -26,10 +27,19 @@ class Ordenador{
     {
         $this->CodHZ = $CodHZ;
     }
+    public function getesSobremesa(){
+        
+        return $this->esSobremesa ?"Si":"No";
+    }
+    
+    public function toString(){
+        return $this->getCodHZ()."-".$this->getSO()."- Sobremesa: ".$this->getesSobremesa();
+    }
 
-    function __construct(string $SO, string $CodHZ){
+    function __construct(string $SO, string $CodHZ, bool $esSobremesa){
         $this->SO = $SO;
         $this->CodHZ = $CodHZ;
+        $this->esSobremesa = $esSobremesa;
     }
     
     

@@ -4,7 +4,26 @@ class Aula extends Espacio {
     private bool $proyector;
     private bool $pizarraDifgital;
     private bool $pantallaTactil;
+    private Ordenador $ordenadores = array();
     
+    
+    
+    public function addOrdenador(Ordenador $orde){
+        if(count($this->ordenadores) < $this->getPuntosRed()){
+            $this->ordenadores[] = $orde;
+        }else{
+            echo "No se pueden añadir mas ordenadores";
+        }
+        
+    }
+    
+    public function addOrdenadores(Ordenador $ordenas){
+        $sum = count($ordenas) + count($this->ordenadores);
+        
+        if($sum <= $this->getPuntosRed()){
+            $this->ordenadores[] = ordenas;
+        }
+    }
     
     public function getNumero()
     {
