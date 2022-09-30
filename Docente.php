@@ -12,14 +12,17 @@ class Docente extends Persona{
     {
         $this->sueldo = $sueldo;
     }
+    
+    public function getName(){
+        return parent::getName();
+    }
 
-    function __construct($name, $DNI, $email, $sueldo, $despacho){
+    function __construct($name , $DNI, $email = "", $sueldo = 0){
+       
+        
+        parent::__construct($name, $DNI, $email);
         $this->sueldo = $sueldo;
-        $this->name = $name;
-        $this->DNI = $DNI;
-        $this->email = $email;
-        $this->sueldo = $sueldo;
-        $this->despacho = $despacho;
+  
     }
     
     
