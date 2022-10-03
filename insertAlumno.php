@@ -12,7 +12,7 @@
 	<input name="name" placeholder="name"><br><input name="DNI"
     placeholder="DNI"> <br><input name="email" placeholder="email"> <br>
     <input name="ciclo" placeholder="ciclo"><br><input name="tutor" placeholder="tutor"><br><input name="dni_tutor" placeholder="dni_tutor"><br><input
-    type="submit" value="Guardar" name="Guardar"><input type="submit" value="Mostrar" name="Mostrar"><input type="submit" value="Eliminar" name="Eliminar">
+    type="submit" value="Guardar" name="Guardar"><input type="submit" value="Mostrar" name="Mostrar"><input type="submit" value="Eliminar" name="Eliminar"><input type="submit" value="Modificar" name="Modificar">
     </form>
     
     <?php
@@ -48,6 +48,8 @@
                     }else{
                         echo "<p style='color:red'> El alumno ya existe</p>";
                     }
+                }else{
+                    echo "<p style='color:red'> Inserte todos los datos en los campos</p>";
                 }
             }
         }elseif(isset($_GET['Mostrar'])){
@@ -62,12 +64,50 @@
         }elseif(isset($_GET['Eliminar'])){
             if (isset($_GET['DNI'])) {
                
-                $DNI = $_GET['DNI'];
+                $DNI_elimi = $_GET['DNI'];
                 
-                if($DNI != NULL){
-                    if(!comprobarExistencia2($DNI, $alumnos)){
-                        
+                if($DNI_elimi != NULL){
+                    if(comprobarExistencia($DNI_elimi)){
+                        foreach ($alumnos as $key => $value){
+                            if($value->getDNI() == $DNI_elimi){
+                                unset($alumnos[$key]);
+                            }
+                        }
+                        Alumno::guardarSerializado('Alumnos_txt', $alumnos);
+                    }else{
+                        echo "<p style='color:red'>El alumno no existe</p><br>";
                     }
+                }else{
+                    echo "<p style='color:red'>Inserte un DNI valido</p><br>";
+                }
+            }
+        }elseif(isset($_GET['Modificar'])){
+            if (isset($_GET['name']) && isset($_GET['DNI']) && isset($_GET['email']) && isset($_GET['ciclo']) && isset($_GET['tutor'])&& isset($_GET['dni_tutor'])) {
+                
+                $nombre_modi = $_GET['name'];
+                $DNI_encontrar = $_GET['DNI'];
+                $ciclo_modi = $_GET['ciclo'];
+                $tutor_modi = $_GET['tutor'];
+                $email_modi = $_GET['email'];
+                $dni_tutor_modi = $_GET['dni_tutor'];
+                
+                if($nombre_modi != NULL && $DNI_encontrar != NULL && $ciclo_modi != NULL && $tutor_modi != NULL && $email_modi != NULL && $dni_tutor_modi != NULL){
+                    if(comprobarExistencia($DNI_encontrar)){
+                        
+                        foreach ($alumnos as $key => $value){
+                            if($value->getDNI() == $DNI_encontrar){
+                                unset($alumnos[$key]);
+                                $tutor = new Docente($tutor_modi,$dni_tutor_modi);
+                                $alumnoNuevo = new Alumno($nombre_modi, $DNI_encontrar, $email_modi, $ciclo_modi, $tutor);
+                                $alumnos[$key] = $alumnoNuevo;
+                                Alumno::guardarSerializado('Alumnos_txt', $alumnos);
+                            }
+                        }
+                    }else{
+                        echo "<p style='color:red'> El alumno no existe</p>";
+                    }
+                }else{
+                    echo "<p style='color:red'> Inserte todos los datos en los campos</p>";
                 }
             }
         }
@@ -81,12 +121,17 @@
         return $pos?true:false;
     }
     
-    function comprobarExistencia2($param) {
-        $pagina = file_get_contents('Alumnos_txt');
-        $pos = strpos($pagina, $param);
+   /*function comprobarExistencia2($param1, $param2) {
         
-        return $pos?true:false;
-    }
+        $enc = FALSE;
+        
+        for($i = 0; $i < count($param2); $i++){
+            if($param2[$i]->getDNI() == $param1){
+                $enc = TRUE;
+            }
+        }
+        return $enc;
+    }*/
    
     ?>
     
